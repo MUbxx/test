@@ -1,133 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>My Courses — Cyber Buddy Academy</title>
-  <link rel="icon" href="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/main/mylogo.png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
-  <style>
-    :root{--accent:#06b6d4;--bg-dark:#0b1220;}
-    body{font-family:'Poppins',sans-serif;background:var(--bg-dark);color:#e6f6f8;min-height:100vh;}
-    .glass{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(8px);}
-    .glow{color:var(--accent);text-shadow:0 0 20px rgba(6,182,212,0.25);}
-    nav a{transition:color 0.2s;}nav a:hover{color:var(--accent);}
-    .course-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;overflow:hidden;transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;}
-    .course-card:hover{transform:translateY(-6px);border-color:rgba(6,182,212,0.35);box-shadow:0 16px 40px rgba(0,0,0,0.4);}
-    .course-card img{transition:transform 0.4s;}
-    .course-card:hover img{transform:scale(1.05);}
-    .h-glow{height:1px;background:linear-gradient(90deg,transparent,rgba(6,182,212,0.5),transparent);}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Courses — Cyber Buddy Academy</title>
+<link rel="icon" href="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/main/mylogo.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
+<style>
+:root{--c:#06b6d4;--bg:#0b1220;--bg2:#0d1829;--bdr:rgba(6,182,212,.12);--tx:#e6f6f8;--dim:#64748b;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+nav{background:rgba(11,18,32,.95);border-bottom:1px solid var(--bdr);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);}
+.nav-logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:.95rem;color:var(--c);}
+.nav-logo img{width:30px;height:30px;border-radius:7px;}
+.nav-links{display:flex;align-items:center;gap:16px;}
+.nav-links a{font-size:.8rem;font-weight:600;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover,.nav-links a.on{color:var(--c);}
+@media(max-width:600px){.nav-links span{display:none;}}
+.cc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;}
+.cc:hover{transform:translateY(-5px);border-color:rgba(6,182,212,.35);box-shadow:0 14px 36px rgba(0,0,0,.4);}
+.cc img{transition:transform .4s;width:100%;height:170px;object-fit:cover;display:block;}
+.cc:hover img{transform:scale(1.05);}
+.prog-track{height:4px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--c),#0ea5e9);border-radius:99px;}
+@media(max-width:640px){.grid{grid-template-columns:1fr!important;}}
+</style>
 </head>
 <body>
+<nav>
+  <div class="nav-logo">
+    <img src="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/refs/heads/main/mylogo.png" alt="">
+    <span>Cyber<span style="color:#fff;">Buddy</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html"><i class="fas fa-th-large" style="margin-right:4px;"></i><span>Dashboard</span></a>
+    <a href="course.html" class="on"><i class="fas fa-book-open" style="margin-right:4px;"></i><span>My Courses</span></a>
+    <button id="logoutBtn" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;padding:6px 12px;border-radius:7px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;"><i class="fas fa-sign-out-alt"></i></button>
+  </div>
+</nav>
 
-  <!-- NAV -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/5">
-    <div class="max-w-screen-2xl mx-auto px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/refs/heads/main/mylogo.png" class="w-10 h-10 rounded-lg" alt="logo">
-        <span class="font-bold text-lg glow">Cyber Buddy Academy</span>
-      </div>
-      <div class="flex items-center gap-6">
-        <a href="dashboard.html" class="text-slate-400 text-sm font-semibold hover:text-cyan-400">Dashboard</a>
-        <a href="course.html" class="text-cyan-400 text-sm font-semibold">My Courses</a>
-        <button id="logoutBtn" class="px-4 py-2 rounded-lg text-sm font-semibold text-red-400 hover:bg-red-500/10 transition">
-          <i class="fas fa-sign-out-alt mr-1"></i>Logout
-        </button>
-      </div>
-    </div>
-  </nav>
-  <div class="h-glow"></div>
+<div style="max-width:1100px;margin:0 auto;padding:28px 18px;">
 
-  <!-- CONTENT -->
-  <div class="max-w-screen-2xl mx-auto px-6 pt-28 pb-16">
-
-    <div class="mb-10">
-      <h1 class="text-3xl font-bold glow">My Purchased Courses</h1>
-      <p class="text-slate-400 mt-2">Courses you have access to. Click to start learning.</p>
-    </div>
-
-    <!-- Loading state -->
-    <div id="loadingState" class="text-center py-16">
-      <i class="fas fa-circle-notch fa-spin text-cyan-400 text-3xl"></i>
-      <p class="text-slate-400 mt-3">Loading your courses...</p>
-    </div>
-
-    <!-- Empty state -->
-    <div id="emptyState" class="hidden text-center py-16">
-      <div class="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);">
-        <i class="fas fa-lock text-cyan-400 text-2xl"></i>
-      </div>
-      <h3 class="text-xl font-bold mb-2">No Courses Purchased</h3>
-      <p class="text-slate-400 text-sm max-w-sm mx-auto">You don't have access to any courses yet. Contact your admin to grant access.</p>
-      <a href="dashboard.html" class="inline-block mt-6 px-6 py-3 rounded-lg font-semibold text-sm" style="background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#042028;">
-        Browse All Courses
-      </a>
-    </div>
-
-    <!-- Courses grid -->
-    <div id="coursesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 hidden"></div>
-
+  <div style="margin-bottom:22px;">
+    <h1 style="font-size:1.4rem;font-weight:800;color:var(--c);">My Courses</h1>
+    <p style="font-size:.8rem;color:var(--dim);margin-top:4px;">Courses you have access to. Click to start learning.</p>
   </div>
 
-  <script type="module">
-    import { auth, db } from "./js/firebase.js";
-    import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  <!-- Search + filter -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+    <div style="position:relative;flex:1;min-width:200px;">
+      <i class="fas fa-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.75rem;"></i>
+      <input id="searchInput" placeholder="Search your courses..." style="width:100%;padding:9px 12px 9px 32px;background:rgba(255,255,255,.04);border:1.5px solid rgba(6,182,212,.14);border-radius:8px;color:var(--tx);font-family:'Poppins',sans-serif;font-size:.82rem;outline:none;">
+    </div>
+  </div>
 
-    const loading = document.getElementById('loadingState');
-    const empty = document.getElementById('emptyState');
-    const grid = document.getElementById('coursesGrid');
+  <!-- Loading -->
+  <div id="loading" style="text-align:center;padding:40px;">
+    <i class="fas fa-circle-notch fa-spin" style="color:var(--c);font-size:1.5rem;"></i>
+    <p style="color:var(--dim);font-size:.8rem;margin-top:10px;">Loading your courses...</p>
+  </div>
 
-    onAuthStateChanged(auth, async user=>{
-      if(!user){ window.location='login.html'; return; }
+  <!-- Empty -->
+  <div id="empty" style="display:none;text-align:center;padding:48px 20px;">
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <i class="fas fa-lock" style="color:var(--c);font-size:1.4rem;"></i>
+    </div>
+    <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">No Courses Yet</h3>
+    <p style="color:var(--dim);font-size:.82rem;max-width:300px;margin:0 auto 18px;">You haven't been enrolled in any courses. Contact your admin for access.</p>
+    <a href="dashboard.html" style="display:inline-block;padding:10px 22px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#042028;font-weight:700;font-size:.82rem;text-decoration:none;">Browse All Courses</a>
+  </div>
 
-      const userSnap = await getDoc(doc(db,'users',user.uid));
-      const userData = userSnap.data();
-      const purchased = userData?.purchasedCourses||[];
+  <!-- Courses grid -->
+  <div id="grid" class="grid" style="display:none;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;"></div>
 
-      if(!purchased.length){
-        loading.classList.add('hidden');
-        empty.classList.remove('hidden');
-        return;
-      }
+</div>
 
-      const coursesSnap = await getDocs(collection(db,'courses'));
-      let count=0;
-      coursesSnap.forEach(c=>{
-        if(!purchased.includes(c.id)) return;
-        count++;
-        const data=c.data();
-        grid.innerHTML+=`
-          <div class="course-card">
-            <div class="overflow-hidden"><img src="${data.image||'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=70'}" class="w-full h-48 object-cover"></div>
-            <div class="p-5">
-              <span class="text-[10px] uppercase tracking-widest text-cyan-400 font-bold bg-cyan-400/10 px-2 py-1 rounded-full">Enrolled</span>
-              <h3 class="font-bold text-base mt-3 mb-2">${data.title}</h3>
-              <p class="text-xs text-slate-400 mb-4 line-clamp-2">${data.description||''}</p>
-              <a href="web-pentesting.html?id=${c.id}" class="block text-center px-4 py-2.5 rounded-lg text-sm font-bold" style="background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#042028;">
-                <i class="fas fa-play mr-2"></i>Continue Learning
-              </a>
-            </div>
-          </div>`;
-      });
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-      if(!count){
-        loading.classList.add('hidden');
-        empty.classList.remove('hidden');
-        return;
-      }
+let allMine = [];
 
-      loading.classList.add('hidden');
-      grid.classList.remove('hidden');
-    });
+onAuthStateChanged(auth, async user=>{
+  if(!user){ window.location='login.html'; return; }
 
-    document.getElementById('logoutBtn').onclick=async()=>{
-      await signOut(auth);
-      window.location='login.html';
-    };
-  </script>
+  const userSnap = await getDoc(doc(db,'users',user.uid));
+  const udata    = userSnap?.data();
+  const purchased = udata?.purchasedCourses || [];
+
+  const coursesSnap = await getDocs(collection(db,'courses'));
+  allMine = [];
+  coursesSnap.forEach(c=>{ if(purchased.includes(c.id)) allMine.push({id:c.id,...c.data()}); });
+
+  document.getElementById('loading').style.display='none';
+
+  if(!allMine.length){ document.getElementById('empty').style.display='block'; return; }
+
+  renderGrid(allMine);
+});
+
+function renderGrid(courses){
+  const grid = document.getElementById('grid');
+  grid.style.display = 'grid';
+  grid.innerHTML = courses.map(c=>`
+    <div class="cc">
+      <div style="overflow:hidden;"><img src="${c.image||'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=70'}" alt="${c.title}"></div>
+      <div style="padding:14px;">
+        <span style="font-size:.64rem;font-weight:700;color:#22c55e;background:rgba(34,197,94,.1);padding:2px 7px;border-radius:99px;border:1px solid rgba(34,197,94,.2);">Enrolled</span>
+        <h4 style="font-size:.9rem;font-weight:700;margin:7px 0 4px;line-height:1.3;">${c.title}</h4>
+        <p style="font-size:.72rem;color:var(--dim);margin-bottom:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${c.description||''}</p>
+        ${c.lessons?.length ? `<p style="font-size:.67rem;color:var(--dim);margin-bottom:10px;"><i class="fas fa-list" style="margin-right:3px;color:var(--c);"></i>${c.lessons.length} lessons</p>` : ''}
+        <!-- Progress bar (stored in localStorage) -->
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--dim);margin-bottom:4px;">
+            <span>Progress</span>
+            <span id="pr-${c.id}">0%</span>
+          </div>
+          <div class="prog-track"><div class="prog-fill" id="pf-${c.id}" style="width:0%;"></div></div>
+        </div>
+        <a href="web-pentesting.html?id=${c.id}" style="display:block;text-align:center;padding:9px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#042028;font-weight:700;font-size:.78rem;text-decoration:none;">
+          <i class="fas fa-play" style="margin-right:4px;"></i>Continue Learning
+        </a>
+      </div>
+    </div>`).join('');
+
+  // Load progress from localStorage
+  courses.forEach(c=>{
+    const prog = parseInt(localStorage.getItem(`cb_prog_${c.id}`) || '0');
+    const el   = document.getElementById(`pf-${c.id}`);
+    const txt  = document.getElementById(`pr-${c.id}`);
+    if(el)  el.style.width  = prog + '%';
+    if(txt) txt.textContent = prog + '%';
+  });
+}
+
+// Search
+document.getElementById('searchInput').addEventListener('input', function(){
+  const q = this.value.toLowerCase();
+  renderGrid(q ? allMine.filter(c=>c.title.toLowerCase().includes(q)) : allMine);
+});
+
+document.getElementById('logoutBtn').onclick = async()=>{
+  await signOut(auth); window.location='login.html';
+};
+</script>
 </body>
 </html>
