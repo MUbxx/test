@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberBuddy — Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
+<style>
+:root{--c:#06b6d4;--c2:#0ea5e9;--bg:#0a0f1e;--bg2:#0d1525;--bg3:#111d30;--bdr:rgba(6,182,212,.13);--tx:#e2e8f0;--dim:#64748b;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+.glass{background:rgba(13,21,37,.8);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);}
+.tab{display:none;}.tab.on{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+#sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--bdr);display:flex;flex-direction:column;padding:18px 10px;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s;}
+#mc{margin-left:240px;padding:26px;min-height:100vh;}
+#mbar{display:none;height:52px;background:var(--bg2);border-bottom:1px solid var(--bdr);align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:99;}
+@media(max-width:768px){#sidebar{transform:translateX(-100%);}#sidebar.open{transform:translateX(0);}#mc{margin-left:0;padding:14px;}#mbar{display:flex;}.sg{grid-template-columns:1fr 1fr!important;}.c2{grid-template-columns:1fr!important;}.uovf{overflow-x:auto;}}
+.ni{display:flex;align-items:center;gap:9px;width:100%;padding:9px 11px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;color:var(--dim);background:transparent;font-family:'Poppins',sans-serif;transition:all .2s;text-align:left;}
+.ni i{width:17px;text-align:center;font-size:.83rem;}
+.ni:hover{background:rgba(6,182,212,.07);color:var(--tx);}
+.ni.on{background:rgba(6,182,212,.14);color:var(--c);border-left:3px solid var(--c);}
+.sep{font-size:.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;padding:12px 11px 5px;}
+.sc{background:var(--bg3);border:1px solid rgba(255,255,255,.06);border-radius:13px;padding:20px;transition:border-color .2s,transform .2s;}
+.sc:hover{border-color:rgba(6,182,212,.3);transform:translateY(-3px);}
+.si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;margin-bottom:12px;}
+.inp{width:100%;padding:9px 12px;background:rgba(255,255,255,.04);border:1.5px solid rgba(6,182,212,.14);border-radius:8px;color:var(--tx);font-family:'Poppins',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s,box-shadow .2s;}
+.inp:focus{border-color:var(--c);box-shadow:0 0 0 3px rgba(6,182,212,.08);}
+.inp::placeholder{color:rgba(230,246,248,.24);}
+textarea.inp{resize:vertical;min-height:68px;}
+.btn{padding:8px 16px;border-radius:8px;font-weight:700;font-size:.79rem;cursor:pointer;border:none;font-family:'Poppins',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:5px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+.bc{background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#042028;}.bc:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 5px 16px rgba(6,182,212,.3);}
+.br{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.22);color:#f87171;}.br:hover{background:rgba(239,68,68,.2);}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:#22c55e;}.bg:hover{background:rgba(34,197,94,.2);}
+.by{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.22);color:#eab308;}.by:hover{background:rgba(234,179,8,.2);}
+.bo{background:transparent;border:1px solid var(--bdr);color:var(--c);}.bo:hover{background:rgba(6,182,212,.07);}
+.bs{padding:4px 10px;font-size:.7rem;}
+.tbl{width:100%;border-collapse:collapse;font-size:.79rem;}
+.tbl th{padding:9px 11px;text-align:left;color:var(--dim);font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid rgba(255,255,255,.05);}
+.tbl td{padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle;}
+.tbl tr:hover td{background:rgba(255,255,255,.015);}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:.65rem;font-weight:700;}
+.bcn{background:rgba(6,182,212,.1);color:var(--c);border:1px solid var(--bdr);}
+.bgr{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.brd{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+.byt{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+.bdv{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.lr{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:13px;margin-bottom:9px;transition:border-color .2s;}
+.lr:hover{border-color:rgba(6,182,212,.22);}
+.step{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.step:last-child{border-bottom:none;}
+.sn{width:21px;height:21px;border-radius:50%;background:rgba(6,182,212,.1);border:1.5px solid rgba(6,182,212,.22);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:700;color:var(--c);flex-shrink:0;}
+.step p{font-size:.75rem;color:var(--dim);line-height:1.6;margin:0;}
+.step p strong{color:var(--tx);}
+.cd{background:var(--bg3);border:1px solid rgba(255,255,255,.06);border-radius:11px;padding:16px;}
+.lbl{display:block;font-size:.67rem;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:5px;}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.sh h2{font-size:1.12rem;font-weight:700;}
+#toast{position:fixed;bottom:18px;right:18px;z-index:999;padding:9px 16px;border-radius:8px;font-size:.79rem;font-weight:600;pointer-events:none;transform:translateY(55px);opacity:0;transition:all .28s;font-family:'Poppins',sans-serif;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{background:#064e3b;border:1px solid #10b981;color:#6ee7b7;}
+#toast.err{background:#4c0519;border:1px solid #f43f5e;color:#fda4af;}
+#toast.info{background:rgba(6,182,212,.15);border:1px solid var(--c);color:var(--c);}
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:14px;}
+.mbg.open{display:flex;}
+.mbox{background:var(--bg2);border:1px solid rgba(6,182,212,.22);border-radius:14px;padding:22px;width:100%;max-width:440px;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:#1e3a4a;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- MOBILE BAR -->
+<div id="mbar">
+  <button id="menuBtn" style="background:none;border:none;color:var(--c);font-size:1.05rem;cursor:pointer;"><i class="fas fa-bars"></i></button>
+  <span style="font-weight:800;font-size:.95rem;color:var(--c);">CYBER<span style="color:#fff;">BUDDY</span></span>
+  <div style="width:22px;"></div>
+</div>
+<div id="ov" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;" onclick="cSB()"></div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div style="display:flex;align-items:center;gap:9px;padding:2px 6px 20px;">
+    <img src="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/refs/heads/main/mylogo.png" style="width:30px;height:30px;border-radius:7px;" alt="">
+    <span style="font-weight:800;font-size:1rem;color:var(--c);">CYBER<span style="color:#fff;">BUDDY</span></span>
+  </div>
+  <div class="sep">Main</div>
+  <button class="ni on" data-tab="dashboard"><i class="fas fa-chart-line"></i>Dashboard</button>
+  <button class="ni" data-tab="users"><i class="fas fa-users"></i>Users</button>
+  <button class="ni" data-tab="courses"><i class="fas fa-book-open"></i>Courses</button>
+  <button class="ni" data-tab="builder"><i class="fas fa-film"></i>Course Builder</button>
+  <div class="sep">System</div>
+  <button class="ni" data-tab="security"><i class="fas fa-shield-alt"></i>Security</button>
+  <button class="ni" data-tab="logs"><i class="fas fa-list-alt"></i>Activity Logs</button>
+  <div style="flex:1;"></div>
+  <button id="logoutBtn" style="display:flex;align-items:center;gap:7px;width:100%;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-family:'Poppins',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .2s;" onmouseover="this.style.background='rgba(239,68,68,.2)'" onmouseout="this.style.background='rgba(239,68,68,.1)'">
+    <i class="fas fa-sign-out-alt"></i>Sign Out
+  </button>
+</div>
+
+<!-- MAIN -->
+<div id="mc">
+
+<!-- ══ DASHBOARD ══ -->
+<section id="dashboard" class="tab on">
+  <div class="sh">
+    <h2>Command Center</h2>
+    <span id="adminBadge" class="bdg bcn"><i class="fas fa-user-shield"></i> Admin</span>
+  </div>
+  <div class="sg" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;">
+    <div class="sc"><div class="si" style="background:rgba(6,182,212,.12);color:var(--c);"><i class="fas fa-users"></i></div><p style="font-size:.7rem;color:var(--dim);margin-bottom:3px;">Total Users</p><h3 id="totalUsers" style="font-size:1.9rem;font-weight:800;color:var(--c);">0</h3></div>
+    <div class="sc"><div class="si" style="background:rgba(34,197,94,.1);color:#22c55e;"><i class="fas fa-book"></i></div><p style="font-size:.7rem;color:var(--dim);margin-bottom:3px;">Total Courses</p><h3 id="totalCourses" style="font-size:1.9rem;font-weight:800;color:#22c55e;">0</h3></div>
+    <div class="sc"><div class="si" style="background:rgba(139,92,246,.1);color:#a78bfa;"><i class="fas fa-graduation-cap"></i></div><p style="font-size:.7rem;color:var(--dim);margin-bottom:3px;">Enrollments</p><h3 id="totalEnrollments" style="font-size:1.9rem;font-weight:800;color:#a78bfa;">0</h3></div>
+    <div class="sc"><div class="si" style="background:rgba(234,179,8,.1);color:#eab308;"><i class="fas fa-play-circle"></i></div><p style="font-size:.7rem;color:var(--dim);margin-bottom:3px;">Active Courses</p><h3 id="activeCourses" style="font-size:1.9rem;font-weight:800;color:#eab308;">0</h3></div>
+  </div>
+  <div class="c2">
+    <div class="cd"><h4 style="font-size:.8rem;font-weight:700;color:var(--c);margin-bottom:12px;"><i class="fas fa-user-plus" style="margin-right:5px;"></i>Recent Registrations</h4><div id="recentUsers"></div></div>
+    <div class="cd"><h4 style="font-size:.8rem;font-weight:700;color:var(--c);margin-bottom:12px;"><i class="fas fa-bolt" style="margin-right:5px;"></i>Recent Activity</h4><div id="actFeed"></div></div>
+  </div>
+</section>
+
+<!-- ══ USERS ══ -->
+<section id="users" class="tab">
+  <div class="sh"><h2>User Management</h2><button class="btn bo bs" onclick="loadDashboard()"><i class="fas fa-sync"></i>Refresh</button></div>
+  <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;">
+    <input id="userSearch" class="inp" style="max-width:270px;" placeholder="Search name or email...">
+    <select id="roleFilter" class="inp" style="max-width:150px;"><option value="">All roles</option><option value="admin">Admin</option><option value="user">User</option></select>
+  </div>
+  <div class="uovf" style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr>
+        <th>Name</th><th>Email</th><th>Role</th><th>Joined</th>
+        <th>Courses</th><th>Grant / Revoke</th><th>Edit Name</th><th>Actions</th>
+      </tr></thead>
+      <tbody id="usersList"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══ COURSES ══ -->
+<section id="courses" class="tab">
+  <div class="sh"><h2>Course Manager</h2></div>
+  <div class="cd" style="margin-bottom:18px;">
+    <h4 style="font-size:.82rem;font-weight:700;color:var(--c);margin-bottom:12px;"><i class="fas fa-plus-circle" style="margin-right:5px;"></i>Quick Add Course</h4>
+    <div class="c2" style="margin-bottom:10px;">
+      <div><label class="lbl">Course Title *</label><input id="title" class="inp" placeholder="e.g. Web Pentesting"></div>
+      <div><label class="lbl">Thumbnail URL</label><input id="image" class="inp" placeholder="https://...jpg"></div>
+      <div style="grid-column:1/-1;"><label class="lbl">Description</label><input id="description" class="inp" placeholder="Short course description"></div>
+      <div style="grid-column:1/-1;">
+        <label class="lbl">Video URL — Drive link, YouTube URL, or &lt;iframe&gt; code</label>
+        <input id="video" class="inp" placeholder='Paste Drive link / YouTube URL / &lt;iframe src="..."&gt;'>
+        <p style="font-size:.65rem;color:var(--dim);margin-top:3px;"><i class="fas fa-info-circle" style="color:var(--c);margin-right:2px;"></i>Auto-converts Drive & YouTube links on save.</p>
+      </div>
+    </div>
+    <button id="uploadBtn" class="btn bc"><i class="fas fa-upload"></i>Upload Course</button>
+  </div>
+  <h4 style="font-size:.82rem;font-weight:700;margin-bottom:10px;">All Courses</h4>
+  <div id="coursesList" class="space-y-3"></div>
+</section>
+
+<!-- ══ COURSE BUILDER ══ -->
+<section id="builder" class="tab">
+  <div class="sh"><h2>Course Builder</h2></div>
+  <p style="font-size:.8rem;color:var(--dim);margin-bottom:18px;">Build multi-lesson courses with Google Drive or YouTube videos — completely free.</p>
+
+  <div class="cd" style="margin-bottom:16px;border-color:rgba(6,182,212,.2);">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:11px;"><i class="fas fa-info-circle" style="color:var(--c);"></i><h4 style="font-size:.83rem;font-weight:700;">How to Add Videos</h4></div>
+    <div class="c2">
+      <div>
+        <p style="font-size:.67rem;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;"><i class="fab fa-google-drive" style="margin-right:3px;"></i>Google Drive</p>
+        <div class="step"><div class="sn">1</div><p>Upload <strong>.mp4</strong> to Google Drive.</p></div>
+        <div class="step"><div class="sn">2</div><p>Right-click → <strong>Share → Anyone with the link</strong>.</p></div>
+        <div class="step"><div class="sn">3</div><p>Copy the share link <strong>or</strong> the <strong>&lt;iframe&gt;</strong> embed code — both work.</p></div>
+        <div class="step"><div class="sn">4</div><p>Paste into <strong>Video URL</strong> below.</p></div>
+      </div>
+      <div>
+        <p style="font-size:.67rem;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;"><i class="fab fa-youtube" style="margin-right:3px;"></i>YouTube (Unlisted)</p>
+        <div class="step"><div class="sn">1</div><p>Upload to <strong>YouTube Studio</strong>.</p></div>
+        <div class="step"><div class="sn">2</div><p>Set visibility to <strong>Unlisted</strong>.</p></div>
+        <div class="step"><div class="sn">3</div><p>Copy the watch URL and paste below.</p></div>
+        <div class="step"><div class="sn">4</div><p>System auto-converts to embed format.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cd" style="margin-bottom:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <h4 style="font-size:.83rem;font-weight:700;">Select or Create Course</h4>
+      <button class="btn bo bs" id="newCourseBtn"><i class="fas fa-plus"></i>New Course</button>
+    </div>
+    <div style="display:flex;gap:9px;align-items:flex-end;flex-wrap:wrap;">
+      <div style="flex:1;min-width:180px;"><label class="lbl">Load existing course</label><select id="builderSel" class="inp"><option value="">— Select —</option></select></div>
+      <button class="btn bo bs" id="loadBuilderBtn" style="height:38px;white-space:nowrap;"><i class="fas fa-folder-open"></i>Load</button>
+    </div>
+  </div>
+
+  <div id="builderForm" style="display:none;">
+    <div class="cd" style="margin-bottom:14px;">
+      <h4 style="font-size:.83rem;font-weight:700;color:var(--c);margin-bottom:12px;">Course Details</h4>
+      <input type="hidden" id="bId">
+      <div class="c2">
+        <div><label class="lbl">Title *</label><input id="bTitle" class="inp" placeholder="Course title"></div>
+        <div><label class="lbl">Thumbnail URL</label><input id="bImage" class="inp" placeholder="https://...jpg"></div>
+        <div style="grid-column:1/-1;"><label class="lbl">Description</label><textarea id="bDesc" class="inp"></textarea></div>
+      </div>
+    </div>
+    <div class="cd" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h4 style="font-size:.83rem;font-weight:700;color:var(--c);">Lessons</h4>
+        <button class="btn bo bs" id="addLessonBtn"><i class="fas fa-plus"></i>Add Lesson</button>
+      </div>
+      <div id="lessonsContainer"><p style="font-size:.78rem;color:var(--dim);text-align:center;padding:12px;">No lessons yet.</p></div>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;">
+      <button class="btn bc" id="saveCourseBtn"><i class="fas fa-save"></i>Save to Firebase</button>
+      <button class="btn bo" id="previewBtn"><i class="fas fa-eye"></i>Preview Player</button>
+      <button class="btn br bs" id="deleteCourseBtn" style="margin-left:auto;"><i class="fas fa-trash"></i>Delete</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECURITY ══ -->
+<section id="security" class="tab">
+  <div class="sh"><h2>Security Center</h2></div>
+  <div class="c2" style="max-width:680px;">
+    <div class="cd">
+      <h4 style="font-size:.82rem;font-weight:700;margin-bottom:12px;color:var(--c);"><i class="fas fa-key" style="margin-right:5px;"></i>Password Reset</h4>
+      <div style="margin-bottom:9px;"><label class="lbl">User Email</label><input id="resetEmail" class="inp" placeholder="user@email.com"></div>
+      <button id="resetPassword" class="btn by"><i class="fas fa-paper-plane"></i>Send Reset Email</button>
+    </div>
+    <div class="cd">
+      <h4 style="font-size:.82rem;font-weight:700;margin-bottom:12px;color:var(--c);"><i class="fas fa-user-tag" style="margin-right:5px;"></i>Change User Role</h4>
+      <div style="margin-bottom:9px;"><label class="lbl">User Email</label><input id="roleEmail" class="inp" placeholder="user@email.com"></div>
+      <div style="margin-bottom:9px;"><label class="lbl">New Role</label><select id="roleVal" class="inp"><option value="user">User</option><option value="admin">Admin</option></select></div>
+      <button id="changeRoleBtn" class="btn bo"><i class="fas fa-exchange-alt"></i>Update Role</button>
+    </div>
+    <div class="cd" style="grid-column:1/-1;">
+      <h4 style="font-size:.82rem;font-weight:700;margin-bottom:10px;color:var(--c);"><i class="fas fa-lock" style="margin-right:5px;"></i>Recommended Firestore Rules</h4>
+      <pre style="background:rgba(0,0,0,.4);border:1px solid rgba(6,182,212,.14);border-radius:8px;padding:13px;font-size:.7rem;color:#94a3b8;overflow-x:auto;line-height:1.6;"><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth.uid == uid;
+    }
+    match /courses/{id} {
+      allow read: if request.auth != null;
+      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    match /logs/{id} {
+      allow read, write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LOGS ══ -->
+<section id="logs" class="tab">
+  <div class="sh"><h2>Activity Logs</h2><button class="btn bo bs" onclick="loadLogs()"><i class="fas fa-sync"></i>Refresh</button></div>
+  <div id="logsContainer"><p style="color:var(--dim);font-size:.8rem;">Loading...</p></div>
+</section>
+
+</div><!-- /mc -->
+
+<!-- NEW COURSE MODAL -->
+<div class="mbg" id="newModal">
+  <div class="mbox">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="font-size:.95rem;font-weight:700;">Create New Course</h3>
+      <button onclick="closeModal()" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:1rem;"><i class="fas fa-times"></i></button>
+    </div>
+    <div style="display:grid;gap:11px;">
+      <div><label class="lbl">Course Title *</label><input id="newTitle" class="inp" placeholder="e.g. Network Security"></div>
+      <div>
+        <label class="lbl">Course ID (URL slug) *</label>
+        <input id="newId" class="inp" placeholder="e.g. network-security" style="font-family:monospace;">
+        <p style="font-size:.65rem;color:var(--dim);margin-top:3px;">URL: web-pentesting.html?id=<strong id="slugPrev" style="color:var(--c);">...</strong></p>
+      </div>
+      <button class="btn bc" id="createBtn" style="width:100%;justify-content:center;"><i class="fas fa-plus"></i>Create Course</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function cSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('ov').style.display='none';}
+document.getElementById('menuBtn')?.addEventListener('click',()=>{document.getElementById('sidebar').classList.add('open');document.getElementById('ov').style.display='block';});
+
+document.querySelectorAll('.ni[data-tab]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+    document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
+    document.getElementById(btn.dataset.tab).classList.add('on');
+    btn.classList.add('on');
+    cSB();
+    if(btn.dataset.tab==='logs') window._loadLogs?.();
+  });
+});
+
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`show ${type}`;setTimeout(()=>t.className='',3000);}
+function closeModal(){document.getElementById('newModal').classList.remove('open');}
+document.getElementById('newModal').addEventListener('click',e=>{if(e.target===document.getElementById('newModal'))closeModal();});
+
+document.getElementById('newTitle').addEventListener('input',function(){
+  const s=this.value.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+  document.getElementById('newId').value=s;
+  document.getElementById('slugPrev').textContent=s||'...';
+});
+document.getElementById('newId').addEventListener('input',function(){document.getElementById('slugPrev').textContent=this.value||'...';});
+
+function cleanUrl(input){
+  if(!input)return'';input=input.trim();
+  const src=input.match(/src=["']([^"']+)["']/);if(src)input=src[1].trim();
+  const drv=input.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if(drv)return`https://drive.google.com/file/d/${drv[1]}/preview`;
+  const yt=input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  if(yt)return`https://www.youtube.com/embed/${yt[1]}?rel=0&modestbranding=1`;
+  return input;
+}
+function vType(input){
+  if(!input)return'link';const src=input.match(/src=["']([^"']+)["']/);if(src)input=src[1];
+  if(input.includes('youtube.com')||input.includes('youtu.be'))return'yt';
+  if(input.includes('drive.google.com'))return'drive';return'link';
+}
+function vBadge(url){
+  const t=vType(url);
+  if(t==='yt')return'<span class="bdg byt"><i class="fab fa-youtube"></i> YouTube</span>';
+  if(t==='drive')return'<span class="bdg bdv"><i class="fab fa-google-drive"></i> Drive</span>';
+  if(url)return'<span class="bdg bcn"><i class="fas fa-link"></i> Link</span>';
+  return'';
+}
+
+let lc=0;
+function addLesson(data={}){
+  lc++;const n=lc;
+  const c=document.getElementById('lessonsContainer');
+  const ph=c.querySelector('p');if(ph)ph.remove();
+  const d=document.createElement('div');d.className='lr';d.dataset.n=n;
+  d.innerHTML=`
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px;">
+      <span style="font-size:.67rem;font-weight:700;color:var(--c);background:rgba(6,182,212,.1);padding:2px 7px;border-radius:5px;">Lesson ${n}</span>
+      <span id="lb-${n}"></span><div style="flex:1;"></div>
+      <button class="btn br bs" onclick="this.closest('.lr').remove()"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="c2">
+      <div><label class="lbl">Title *</label><input class="inp lt" placeholder="Lesson title" value="${data.title||''}"></div>
+      <div><label class="lbl">Duration</label><input class="inp ld" placeholder="e.g. 15 min" value="${data.duration||''}"></div>
+      <div style="grid-column:1/-1;">
+        <label class="lbl">Video URL — Drive link, YouTube URL, or &lt;iframe&gt; code *</label>
+        <div style="display:flex;gap:7px;">
+          <input class="inp lv" style="flex:1;" placeholder="Paste Drive / YouTube / iframe..." value="${data.videoUrl||data.video||''}" oninput="updLB(${n},this.value)">
+          <button class="btn bo bs" onclick="testV(${n})"><i class="fas fa-play"></i></button>
+        </div>
+      </div>
+      <div style="grid-column:1/-1;"><label class="lbl">Description</label><textarea class="inp ldsc" style="min-height:52px;">${data.description||''}</textarea></div>
+    </div>`;
+  c.appendChild(d);updLB(n,data.videoUrl||data.video||'');
+}
+function updLB(n,url){const e=document.getElementById('lb-'+n);if(e)e.innerHTML=vBadge(url);}
+function testV(n){
+  const row=document.querySelector(`.lr[data-n="${n}"]`);
+  const url=cleanUrl(row.querySelector('.lv').value.trim());
+  if(!url){toast('Enter a video URL first','err');return;}window.open(url,'_blank');
+}
+function getLessons(){
+  return[...document.querySelectorAll('.lr')].map((r,i)=>({
+    id:'l'+(i+1),title:r.querySelector('.lt').value.trim(),
+    duration:r.querySelector('.ld').value.trim(),
+    videoUrl:cleanUrl(r.querySelector('.lv').value.trim()),
+    description:r.querySelector('.ldsc').value.trim(),
+  })).filter(l=>l.title&&l.videoUrl);
+}
+document.getElementById('addLessonBtn').onclick=()=>addLesson();
+document.getElementById('newCourseBtn').onclick=()=>{
+  document.getElementById('newModal').classList.add('open');
+  document.getElementById('newTitle').value='';document.getElementById('newId').value='';
+  document.getElementById('slugPrev').textContent='...';
+};
+</script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>
