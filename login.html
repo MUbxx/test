@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Cyber Buddy Academy</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/main/mylogo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
+  <style>
+    :root { --accent:#06b6d4; --accent-700:#0891b2; --bg-dark:#0b1220; }
+    body { font-family:'Poppins',sans-serif; background:var(--bg-dark); color:#e6f6f8; min-height:100vh; margin:0; }
+    .bg-overlay { position:fixed; inset:0; z-index:-1; }
+    .bg-overlay canvas { width:100%; height:100%; display:block; }
+
+    .glass-card {
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      backdrop-filter:blur(12px);
+    }
+
+    .input-field {
+      width:100%; padding:12px 16px;
+      background:rgba(255,255,255,0.05);
+      border:1.5px solid rgba(6,182,212,0.2);
+      border-radius:10px; color:#e6f6f8;
+      font-family:'Poppins',sans-serif; font-size:0.9rem;
+      transition:border-color 0.3s, box-shadow 0.3s;
+      outline:none;
+    }
+    .input-field:focus {
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(6,182,212,0.12);
+    }
+    .input-field::placeholder { color:rgba(230,246,248,0.35); }
+
+    .btn-primary {
+      width:100%; padding:13px;
+      background:linear-gradient(135deg,#06b6d4,#0ea5e9);
+      color:#042028; font-weight:700; font-size:0.9rem;
+      border:none; border-radius:10px; cursor:pointer;
+      transition:transform 0.2s, box-shadow 0.2s;
+      font-family:'Poppins',sans-serif;
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(6,182,212,0.35); }
+    .btn-primary:disabled { opacity:0.6; transform:none; cursor:not-allowed; }
+
+    .btn-google {
+      width:100%; padding:12px;
+      background:rgba(255,255,255,0.06);
+      border:1.5px solid rgba(255,255,255,0.12);
+      border-radius:10px; color:#e6f6f8; font-weight:600; font-size:0.9rem;
+      cursor:pointer; transition:all 0.2s; display:flex; align-items:center;
+      justify-content:center; gap:10px; font-family:'Poppins',sans-serif;
+    }
+    .btn-google:hover { background:rgba(255,255,255,0.1); border-color:rgba(6,182,212,0.35); }
+
+    .glow { color:var(--accent); text-shadow:0 0 20px rgba(6,182,212,0.3); }
+
+    .divider { display:flex; align-items:center; gap:12px; color:rgba(230,246,248,0.3); font-size:0.8rem; }
+    .divider::before,.divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.1); }
+
+    .toast {
+      position:fixed; bottom:24px; right:24px; z-index:100;
+      padding:12px 20px; border-radius:10px; font-size:0.85rem; font-weight:600;
+      transition:all 0.35s ease; transform:translateY(80px); opacity:0;
+      pointer-events:none;
+    }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast.success { background:#064e3b; border:1px solid #10b981; color:#6ee7b7; }
+    .toast.error { background:#4c0519; border:1px solid #f43f5e; color:#fda4af; }
+
+    /* entrance animation */
+    .form-wrap { animation:formIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes formIn { from{opacity:0;transform:translateY(28px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+    body.light-mode { background:#f0f4f8; color:#0b1220; }
+    body.light-mode .glass-card { background:rgba(255,255,255,0.9); border-color:rgba(11,18,32,0.1); }
+    body.light-mode .input-field { background:rgba(255,255,255,0.95); color:#0b1220; border-color:rgba(11,18,32,0.18); }
+    body.light-mode .input-field::placeholder { color:rgba(11,18,32,0.35); }
+    body.light-mode .btn-google { background:#fff; border-color:rgba(11,18,32,0.18); color:#0b1220; }
+  </style>
+</head>
+<body>
+  <div class="bg-overlay" aria-hidden="true"><canvas id="bg"></canvas></div>
+
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="form-wrap w-full max-w-md">
+
+      <!-- Logo -->
+      <div class="text-center mb-8">
+        <img src="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/refs/heads/main/mylogo.png" alt="Logo" class="w-16 h-16 rounded-xl mx-auto mb-3 border border-cyan-400/20">
+        <h1 class="text-2xl font-bold glow">Cyber Buddy Academy</h1>
+        <p class="text-sm text-slate-400 mt-1">Sign in to your account</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-8 space-y-5">
+
+        <!-- Theme toggle -->
+        <div class="flex justify-end">
+          <button id="themeBtn" class="text-cyan-400 text-sm opacity-60 hover:opacity-100 transition">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-xs font-semibold text-cyan-400 uppercase tracking-widest mb-2">Email Address</label>
+          <input id="email" type="email" class="input-field" placeholder="you@email.com">
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-xs font-semibold text-cyan-400 uppercase tracking-widest">Password</label>
+            <button id="forgotBtn" class="text-xs text-cyan-400 hover:underline">Forgot Password?</button>
+          </div>
+          <div class="relative">
+            <input id="password" type="password" class="input-field pr-12" placeholder="••••••••">
+            <button id="togglePw" type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-400 transition">
+              <i class="fas fa-eye" id="pwIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Login button -->
+        <button id="loginBtn" class="btn-primary">
+          <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+        </button>
+
+        <!-- Divider -->
+        <div class="divider">OR</div>
+
+        <!-- Google OAuth -->
+        <button id="googleBtn" class="btn-google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
+          Continue with Google
+        </button>
+
+        <!-- Register link -->
+        <p class="text-center text-sm text-slate-400">
+          Don't have an account?
+          <a href="register.html" class="text-cyan-400 font-semibold hover:underline ml-1">Register</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // Matrix BG
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    let drops = [];
+    function resizeBG(){
+      canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+      drops=Array.from({length:Math.floor(canvas.width/14)},()=>1);
+    }
+    resizeBG(); window.addEventListener('resize',resizeBG);
+    function drawBG(){
+      ctx.fillStyle='rgba(11,18,32,0.1)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#06b6d4'; ctx.font='13px monospace';
+      drops.forEach((y,i)=>{
+        ctx.fillText(Math.random()>0.5?'1':'0',i*14,y*14);
+        if(y*14>canvas.height&&Math.random()>0.977) drops[i]=0;
+        drops[i]++;
+      });
+    }
+    setInterval(drawBG,50);
+
+    // Theme
+    let light = localStorage.getItem('cb-theme')==='light';
+    const themeBtn = document.getElementById('themeBtn');
+    function applyTheme(){ document.body.classList.toggle('light-mode',light); themeBtn.innerHTML=light?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>'; localStorage.setItem('cb-theme',light?'light':'dark'); }
+    applyTheme();
+    themeBtn.onclick=()=>{ light=!light; applyTheme(); };
+
+    // Password toggle
+    const pw = document.getElementById('password');
+    const pwIcon = document.getElementById('pwIcon');
+    document.getElementById('togglePw').onclick=()=>{
+      const v = pw.type==='password'; pw.type=v?'text':'password';
+      pwIcon.className=v?'fas fa-eye-slash':'fas fa-eye';
+    };
+
+    // Toast
+    function showToast(msg,type='success'){
+      const t=document.getElementById('toast');
+      t.textContent=msg; t.className=`toast ${type} show`;
+      setTimeout(()=>t.classList.remove('show'),3500);
+    }
+  </script>
+
+  <script type="module">
+    import { auth, db } from "./js/firebase.js";
+    import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Auto-redirect if already logged in
+    onAuthStateChanged(auth, user => { if(user) window.location = "dashboard.html"; });
+
+    async function redirectByRole(user){
+      const snap = await getDoc(doc(db,"users",user.uid));
+      if(snap.exists() && snap.data().role==="admin") window.location="admin.html";
+      else window.location="dashboard.html";
+    }
+
+    // Email login
+    document.getElementById('loginBtn').onclick = async()=>{
+      const btn = document.getElementById('loginBtn');
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      if(!email||!password){ showToast('Please fill in all fields','error'); return; }
+      btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin mr-2"></i>Signing in...';
+      try{
+        const res = await signInWithEmailAndPassword(auth,email,password);
+        if(!res.user.emailVerified){ showToast('Please verify your email first','error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-sign-in-alt mr-2"></i>Sign In'; return; }
+        await redirectByRole(res.user);
+      }catch(err){
+        showToast(err.message.replace('Firebase: ','').replace(/\(auth.*\)/,''),'error');
+        btn.disabled=false; btn.innerHTML='<i class="fas fa-sign-in-alt mr-2"></i>Sign In';
+      }
+    };
+
+    // Google OAuth
+    document.getElementById('googleBtn').onclick = async()=>{
+      try{
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
+        const user = result.user;
+        const ref = doc(db,"users",user.uid);
+        const snap = await getDoc(ref);
+        if(!snap.exists()){
+          await setDoc(ref,{ name:user.displayName, email:user.email, phone:"", role:"user", purchasedCourses:[], createdAt:new Date() });
+        }
+        await redirectByRole(user);
+      }catch(err){ showToast('Google login failed','error'); }
+    };
+
+    // Forgot password
+    document.getElementById('forgotBtn').onclick = async()=>{
+      const email = document.getElementById('email').value.trim();
+      if(!email){ showToast('Enter your email first','error'); return; }
+      try{
+        await sendPasswordResetEmail(auth,email);
+        showToast('Password reset email sent!','success');
+      }catch(err){ showToast(err.message,'error'); }
+    };
+  </script>
+</body>
+</html>

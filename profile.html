@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Profile — Cyber Buddy Academy</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/main/mylogo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
+  <style>
+    :root{--accent:#06b6d4;--bg-dark:#0b1220;}
+    body{font-family:'Poppins',sans-serif;background:var(--bg-dark);color:#e6f6f8;min-height:100vh;}
+    .glass{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px);}
+    .glow{color:var(--accent);text-shadow:0 0 20px rgba(6,182,212,0.25);}
+    .input-field{width:100%;padding:12px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(6,182,212,0.18);border-radius:10px;color:#e6f6f8;font-family:'Poppins',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.25s,box-shadow 0.25s;}
+    .input-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(6,182,212,0.1);}
+    .input-field::placeholder{color:rgba(230,246,248,0.3);}
+    .input-field[readonly]{opacity:0.5;cursor:not-allowed;}
+    .btn-cyan{padding:12px 24px;border-radius:10px;font-weight:700;font-size:0.9rem;cursor:pointer;border:none;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#042028;transition:transform 0.2s,box-shadow 0.2s;}
+    .btn-cyan:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,182,212,0.3);}
+    .toast{position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 18px;border-radius:10px;font-size:0.85rem;font-weight:600;transition:all 0.3s;transform:translateY(60px);opacity:0;pointer-events:none;}
+    .toast.show{transform:translateY(0);opacity:1;}
+    .toast.success{background:#064e3b;border:1px solid #10b981;color:#6ee7b7;}
+    .toast.error{background:#4c0519;border:1px solid #f43f5e;color:#fda4af;}
+    .h-glow{height:1px;background:linear-gradient(90deg,transparent,rgba(6,182,212,0.5),transparent);}
+    .avatar-ring{border:3px solid rgba(6,182,212,0.4);box-shadow:0 0 20px rgba(6,182,212,0.2);}
+    .stat-item{text-align:center;}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/5 px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/refs/heads/main/mylogo.png" class="w-10 h-10 rounded-lg" alt="logo">
+      <span class="font-bold text-lg glow">Cyber Buddy Academy</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a href="dashboard.html" class="text-sm text-slate-400 hover:text-cyan-400 transition font-semibold">Dashboard</a>
+      <button id="logoutBtn" class="text-sm text-red-400 hover:bg-red-500/10 px-3 py-2 rounded-lg transition font-semibold">
+        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+      </button>
+    </div>
+  </nav>
+  <div class="h-glow mt-16"></div>
+
+  <div class="max-w-3xl mx-auto px-6 py-12">
+
+    <!-- Profile header card -->
+    <div class="glass rounded-2xl overflow-hidden mb-6">
+      <!-- Cover -->
+      <div class="h-28" style="background:linear-gradient(135deg,rgba(6,182,212,0.25),rgba(14,165,233,0.15),rgba(6,182,212,0.05));"></div>
+      <!-- Avatar & info -->
+      <div class="px-8 pb-6 -mt-12">
+        <div class="flex items-end justify-between">
+          <div id="avatarCircle" class="w-20 h-20 rounded-xl avatar-ring bg-cyan-400/20 flex items-center justify-center text-3xl font-bold text-cyan-400">
+            ?
+          </div>
+          <span id="roleTag" class="px-3 py-1 rounded-full text-xs font-bold" style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);">Student</span>
+        </div>
+        <h2 id="displayName" class="text-2xl font-bold mt-3">Loading...</h2>
+        <p id="displayEmail" class="text-slate-400 text-sm mt-1"></p>
+
+        <!-- Stats row -->
+        <div class="flex gap-8 mt-5 pt-5 border-t border-white/5">
+          <div class="stat-item">
+            <p class="text-xl font-bold text-cyan-400" id="statCourses">0</p>
+            <p class="text-xs text-slate-500 mt-1">Courses</p>
+          </div>
+          <div class="stat-item">
+            <p class="text-xl font-bold text-cyan-400" id="statCerts">0</p>
+            <p class="text-xs text-slate-500 mt-1">Certificates</p>
+          </div>
+          <div class="stat-item">
+            <p class="text-xl font-bold text-cyan-400">Level 1</p>
+            <p class="text-xs text-slate-500 mt-1">Rank</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit form -->
+    <div class="glass rounded-2xl p-8 space-y-5">
+      <h3 class="text-lg font-bold">Edit Profile</h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-xs text-cyan-400 uppercase tracking-widest mb-2 font-semibold">Display Name</label>
+          <input id="editName" class="input-field" placeholder="Your name">
+        </div>
+        <div>
+          <label class="block text-xs text-cyan-400 uppercase tracking-widest mb-2 font-semibold">Phone Number</label>
+          <input id="editPhone" class="input-field" placeholder="+91 98765 43210">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-cyan-400 uppercase tracking-widest mb-2 font-semibold">Email Address (read-only)</label>
+        <input id="editEmail" class="input-field" readonly>
+      </div>
+
+      <!-- Avatar picker (UI only) -->
+      <div>
+        <label class="block text-xs text-cyan-400 uppercase tracking-widest mb-3 font-semibold">Avatar Color</label>
+        <div class="flex gap-3">
+          <button onclick="setAvatar('#06b6d4')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white/40 transition" style="background:#06b6d4"></button>
+          <button onclick="setAvatar('#8b5cf6')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white/40 transition" style="background:#8b5cf6"></button>
+          <button onclick="setAvatar('#ec4899')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white/40 transition" style="background:#ec4899"></button>
+          <button onclick="setAvatar('#22c55e')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white/40 transition" style="background:#22c55e"></button>
+          <button onclick="setAvatar('#f59e0b')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white/40 transition" style="background:#f59e0b"></button>
+        </div>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button id="saveProfile" class="btn-cyan">
+          <i class="fas fa-save mr-2"></i>Save Changes
+        </button>
+        <button id="resetPwBtn" class="px-6 py-3 rounded-lg font-semibold text-sm border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition">
+          <i class="fas fa-key mr-2"></i>Reset Password
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),3500);}
+    let avatarColor='#06b6d4';
+    function setAvatar(color){
+      avatarColor=color;
+      document.getElementById('avatarCircle').style.background=color+'33';
+      document.getElementById('avatarCircle').style.color=color;
+    }
+  </script>
+
+  <script type="module">
+    import { auth, db } from "./js/firebase.js";
+    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    onAuthStateChanged(auth, async user=>{
+      if(!user){ window.location='login.html'; return; }
+
+      const snap = await getDoc(doc(db,'users',user.uid));
+      const data = snap.data();
+
+      // Fill UI
+      const name = data?.name||'User';
+      const initial = name.charAt(0).toUpperCase();
+      document.getElementById('avatarCircle').textContent = initial;
+      document.getElementById('displayName').textContent = name;
+      document.getElementById('displayEmail').textContent = data?.email||user.email;
+      document.getElementById('editName').value = name;
+      document.getElementById('editEmail').value = data?.email||user.email;
+      document.getElementById('editPhone').value = data?.phone||'';
+      document.getElementById('statCourses').textContent = (data?.purchasedCourses||[]).length;
+      document.getElementById('roleTag').textContent = data?.role==='admin'?'Admin':'Student';
+
+      // Load certs count from GitHub JSON
+      try{
+        const res=await fetch("https://raw.githubusercontent.com/Mubyyy404/Cyber-Buddy/main/certificates.json");
+        const json=await res.json();
+        const arr=Array.isArray(json)?json:(json.certificates||[]);
+        const mine=arr.filter(c=>c.email&&c.email.toLowerCase()===user.email.toLowerCase());
+        document.getElementById('statCerts').textContent=mine.length;
+      }catch(_){}
+    });
+
+    document.getElementById('saveProfile').onclick=async()=>{
+      const user=auth.currentUser;
+      const name=document.getElementById('editName').value.trim();
+      const phone=document.getElementById('editPhone').value.trim();
+      if(!name){ showToast('Name cannot be empty','error'); return; }
+      await updateDoc(doc(db,'users',user.uid),{name,phone});
+      document.getElementById('displayName').textContent=name;
+      document.getElementById('avatarCircle').textContent=name.charAt(0).toUpperCase();
+      showToast('Profile updated successfully','success');
+    };
+
+    document.getElementById('resetPwBtn').onclick=async()=>{
+      const user=auth.currentUser;
+      await sendPasswordResetEmail(auth,user.email);
+      showToast('Password reset email sent to '+user.email,'success');
+    };
+
+    document.getElementById('logoutBtn').onclick=async()=>{
+      await signOut(auth);
+      window.location='login.html';
+    };
+  </script>
+</body>
+</html>
